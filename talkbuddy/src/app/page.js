@@ -1,27 +1,47 @@
 "use client";
 import Image from "next/image";
 import styles from "./page.module.css";
-import { useState } from "react";
 
-//import { useState, useEffect } from "react";
+import axios from "axios";
+import { useState } from "react";
 
 export default function Home() {
   const [inputMessage, setInputMessage] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const key = process.env.OPENAI_API_KEY;
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if (chatHistory.length === 0) {
-      setChatHistory([{ type: "user", message: inputMessage }]);
-    } else {
+
+    setChatHistory((oldMessages) => [
+      ...oldMessages,
+      { type: "user", message: inputMessage },
+    ]);
+    chatRequest(inputMessage);
+
+    setInputMessage("");
+  };
+
+  const chatRequest = (message) => {
+    const url = "https://api.openai.com/v1/chat/completions";
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${key}`,
+    };
+    const data = {
+      model: "gpt-4-turbo-2024-04-09",
+      messages: [{ role: "user", content: message }],
+    };
+    setIsLoading(true);
+
+    axios.post(url, data, { headers: headers }).then((response) => {
       setChatHistory((oldMessages) => [
         ...oldMessages,
-        { type: "user", message: inputMessage },
-      ]);
-    }
-    setInputMessage("");
-    console.log(chatHistory);
+        { type: "bot", message: response.data.choices[0].message.content }
+      ])
+      setIsLoading(false)
+    });
   };
 
   return (
@@ -47,6 +67,10 @@ export default function Home() {
               </div>
             );
           })}
+          {
+            isLoading &&
+            <div className="bot-chat">Thinking...</div>
+          }
         </div>
         {/* <!-- Input Section --> */}
         <form className="input-section" onSubmit={submitHandler}>
