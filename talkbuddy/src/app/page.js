@@ -1,4 +1,5 @@
 "use client";
+require('dotenv').config();
 import Image from "next/image";
 import styles from "./page.module.css";
 
@@ -24,18 +25,18 @@ export default function Home() {
   };
 
   const chatRequest = (message) => {
-    const url = "https://api.openai.com/v1/chat/completions";
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${key}`,
-    };
+    const url = "/api/chat";
+    // const headers = {
+    //   "Content-Type": "application/json",
+    //   Authorization: `Bearer ${key}`,
+    // };
     const data = {
-      model: "gpt-4-turbo-2024-04-09",
+      model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: message }],
     };
     setIsLoading(true);
 
-    axios.post(url, data, { headers: headers }).then((response) => {
+    axios.post(url, data).then((response) => {
       setChatHistory((oldMessages) => [
         ...oldMessages,
         { type: "bot", message: response.data.choices[0].message.content }
