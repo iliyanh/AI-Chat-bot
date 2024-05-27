@@ -9,7 +9,6 @@ TalkBuddy is a chat application that allows users to interact with an AI chatbot
 ## Table of Contents
 
 - [Installation](#installation)
-- [Usage](#usage)
 - [Acknowledgements](#acknowledgements)
 - [Contact Information](#contact-information)
 
