@@ -1,16 +1,24 @@
-"use client";
 require('dotenv').config();
-import Image from "next/image";
-import styles from "./page.module.css";
+import { Inter } from 'next/font/google'
+
+const inter = Inter({ subsets: ['latin'] })
 
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+
 
 export default function Home() {
   const [inputMessage, setInputMessage] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const key = process.env.OPENAI_API_KEY;
+
+  const chatSectionRef = useRef(null);
+
+  useEffect(() => {
+    if (chatSectionRef.current) {
+      chatSectionRef.current.scrollTop = chatSectionRef.current.scrollHeight;
+    }
+  }, [chatHistory]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -25,11 +33,7 @@ export default function Home() {
   };
 
   const chatRequest = (message) => {
-    const url = "/api/chat";
-    // const headers = {
-    //   "Content-Type": "application/json",
-    //   Authorization: `Bearer ${key}`,
-    // };
+    const url = "/api/chat"
     const data = {
       model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: message }],
@@ -45,6 +49,7 @@ export default function Home() {
     });
   };
 
+
   return (
     <div className="container">
       {/* <!-- Chatbox --> */}
@@ -57,7 +62,7 @@ export default function Home() {
           </div>
         </div>
         {/* <!-- Chat --> */}
-        <div className="chat-section">
+        <div className="chat-section" ref={chatSectionRef}>
           {chatHistory.map((message, index) => {
             return (
               <div
@@ -89,3 +94,4 @@ export default function Home() {
     </div>
   );
 }
+

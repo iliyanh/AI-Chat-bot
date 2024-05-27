@@ -50,7 +50,7 @@ body {
   padding: 0 15px;
   position: relative;
   /* font-size: 0.9em; */
-  overflow-x: auto;
+  overflow-y: auto;
 }
 .bot-chat {
   width: 60%;
