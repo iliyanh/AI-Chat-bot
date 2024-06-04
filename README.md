@@ -45,7 +45,6 @@ To install and run this project locally, follow these steps:
 - [Font Awesome](https://fontawesome.com) for the icons.
 - [Axios](https://axios-http.com) for making HTTP requests.
 - [dotenv](https://github.com/motdotla/dotenv) for managing environment variables.
-- 
 
 ## Contact Information
 
